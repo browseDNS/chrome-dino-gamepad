@@ -27,7 +27,21 @@
   'use strict';
   var currentScore = 0;
 
-  var AudioContext = window.AudioContext || window.webkitAudioContext || false;
+  function stubAudioContext() {
+    this.createBufferSource = function () {
+      return {
+        connect: function () { },
+        start: function () { },
+        stop: function () { }
+      };
+    };
+    this.decodeAudioData = function (buffer, callback) {
+      callback(buffer);
+    };
+    this.destination = {};
+  }
+
+  var AudioContext = window.AudioContext || window.webkitAudioContext || stubAudioContext;
 
   function Runner(outerContainerId, opt_config) {
     if (Runner.instance_) {
